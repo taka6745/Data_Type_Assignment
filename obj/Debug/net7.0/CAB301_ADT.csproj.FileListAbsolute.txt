@@ -1,0 +1,15 @@
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.csproj.AssemblyReference.cache
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.AssemblyInfoInputs.cache
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.AssemblyInfo.cs
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.csproj.CoreCompileInputs.cache
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/bin/Debug/net7.0/CAB301_ADT
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/bin/Debug/net7.0/CAB301_ADT.deps.json
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/bin/Debug/net7.0/CAB301_ADT.runtimeconfig.json
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/bin/Debug/net7.0/CAB301_ADT.dll
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/bin/Debug/net7.0/CAB301_ADT.pdb
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.dll
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/refint/CAB301_ADT.dll
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.pdb
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/CAB301_ADT.genruntimeconfig.cache
+/Volumes/GoogleDrive/My Drive/Github/CAB301_ADT/obj/Debug/net7.0/ref/CAB301_ADT.dll
