@@ -4,17 +4,14 @@ public interface ITask
 
     int TimeNeeded { get; }
 
-    ITask[] ? Dependencies { get; }
+    string[] Dependencies { get; }
 
     int DependencyCount { get; }
 
-    // Add a dependency between the task and its dependency task
-    void AddDependency(ITask dependency);
+    void AddDependency(string dependencyID);
 
-    // Remove a dependency between the task and its dependency task
-    void RemoveDependency(ITask dependency);
+    void RemoveDependency(string dependencyID);
 
-    // Change the time needed to complete the task with the specified task ID
-    void ChangeTimeNeeded(string taskID, int newTimeNeeded);
+    void ChangeTimeNeeded(int newTimeNeeded);
 
 }

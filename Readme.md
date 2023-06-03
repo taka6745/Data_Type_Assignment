@@ -32,3 +32,25 @@ This assignment focuses on applying your knowledge of data structures and algori
 - The submitted archive must be in standard .zip format. Other formats like .7z, .rar, .gz, etc., will not be accepted.
 - Submit your assignment through the CAB301 Canvas website. Email submissions are not accepted.
 - You can submit your assignment multiple times before the deadline.
+
+## Tests
+| Type     | Test Case                                                            | Expected Outcome                                                                                    | Pass |
+|----------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|------|
+| Positive | Enter a valid text file name                                         | The system should correctly load the tasks from the text file                                      | 1    |
+| Negative | Enter an invalid or non-existent text file name                      | The system should throw an error message or ask for the file name again                           | 1    |
+| Negative | Add a new task with no time                                          | The system should throw an error message                                                          | 1    |
+| Negative | Invalid TaskID, valid time                                           | Error Message                                                                                      | 1    |
+| Negative | Invalid Time, Valid taskID                                           | Error Message                                                                                      | 1    |
+| Positive | Add a new task with no dependencies                                  | The system should successfully add the task and the task should appear in the list of tasks        | 1    |
+| Negative | Add a task with a valid time and invalid Dependency format            | Error Message                                                                                      | 1    |
+| Positive | Add a new task with dependencies that exist in the system             | The system should successfully add the task and correctly associate it with its dependencies       | 1    |
+| Negative | Add a new task with dependencies that do not exist in the system      | The system should not allow the addition of the task and throw an error or warning message         | 1    |
+| Positive | Remove a task that exists in the system                               | The task should be successfully removed from the system, and no other tasks should depend on it    | 1    |
+| Negative | Remove a task that does not exist in the system                        | The system should throw an error message stating that the task does not exist                       | 1    |
+| Positive | Change the time of a task that exists in the system                    | The system should successfully update the task's time                                              | 1    |
+| Negative | Change the time of a task that does not exist in the system             | The system should throw an error message stating that the task does not exist                       | 1    |
+| Positive | Save after making valid changes                                       | The system should successfully update the text file with the new task details                      | 1    |
+| Positive | Run the sequence-finding operation on a set of tasks with valid dependencies           | The system should return a valid sequence that satisfies all dependencies                        | 1    |
+| Negative | Run the sequence-finding operation on a set of tasks with circular dependencies       | The system should return an error or a warning about the impossible sequence                     | 0    |
+| Positive | Run the commencement time-finding operation on a set of tasks with valid dependencies  | The system should return the earliest commencement times for each task correctly                  | 1    |
+| Negative | Run the commencement time-finding operation on a set of tasks with circular dependencies  | The system should return an error or a warning about the impossible commencement times            | 0    |

@@ -1,148 +1,238 @@
-using System.IO;
-using System.Text;
-
 public class TaskManager : ITaskManager
 {
-    private ITask[] Tasks;
-    private int TaskCount;
+    private ITask[] tasks;
+    private int taskCount;
 
     public TaskManager()
     {
-        Tasks = new ITask[1]; // Initiate with size 1
-        TaskCount = 0;
-    }
-
-    private int GetIndex(string taskID)
-    {
-        for (int i = 0; i < TaskCount; i++)
-        {
-            if (Tasks[i].TaskID == taskID)
-            {
-                return i;
-            }
-        }
-        return -1;
+        tasks = new ITask[0];
+        taskCount = 0;
     }
 
     public void AddTask(ITask task)
     {
-        if (GetIndex(task.TaskID) != -1) 
-            return; // do not add if task with the same ID already exists
-
-        if (TaskCount == Tasks.Length)
+        for (int i = 0; i < taskCount; i++)
         {
-            var newTasks = new ITask[Tasks.Length + 1];
-            for (int i = 0; i < Tasks.Length; i++)
-            {
-                newTasks[i] = Tasks[i];
-            }
-            Tasks = newTasks;
+            if (tasks[i].TaskID == task.TaskID)
+                return;
         }
 
-        Tasks[TaskCount] = task;
-        TaskCount++;
+        ITask[] newTasks = new ITask[taskCount + 1];
+        for (int i = 0; i < taskCount; i++)
+        {
+            newTasks[i] = tasks[i];
+        }
+        newTasks[taskCount] = task;
+        tasks = newTasks;
+        taskCount++;
     }
+    
 
     public void RemoveTask(string taskID)
     {
-        int index = GetIndex(taskID);
-        if (index == -1)
-            return;
-
-        for (int i = index; i < TaskCount - 1; i++)
+        ITask ? taskToRemove = null;
+        for (int i = 0; i < taskCount; i++)
         {
-            Tasks[i] = Tasks[i + 1];
+            if (tasks[i].TaskID == taskID)
+            {
+                taskToRemove = tasks[i];
+                break;
+            }
         }
-        Tasks[TaskCount - 1] = null;
-        TaskCount--;
+
+        if (taskToRemove != null)
+        {
+            for (int i = 0; i < taskCount; i++)
+            {
+                tasks[i].RemoveDependency(taskID);
+            }
+
+            ITask[] newTasks = new ITask[taskCount - 1];
+            int index = 0;
+            for (int i = 0; i < taskCount; i++)
+            {
+                if (tasks[i].TaskID != taskID)
+                {
+                    newTasks[index] = tasks[i];
+                    index++;
+                }
+            }
+            tasks = newTasks;
+            taskCount--;
+        }
     }
 
+    public void ChangeTaskTime(string taskID, int newTime)
+    {
+        for (int i = 0; i < taskCount; i++)
+        {
+            if (tasks[i].TaskID == taskID)
+            {
+                tasks[i].ChangeTimeNeeded(newTime);
+                break;
+            }
+        }
+    }
+
+
+    public string[] GetTaskDetails()
+{
+    string[] details = new string[taskCount];
+    for (int i = 0; i < taskCount; i++)
+    {
+        string detail = $"{tasks[i].TaskID}, {tasks[i].TimeNeeded}";
+        if(tasks[i].Dependencies.Length > 0)
+        {
+            string dependencyIds = String.Join(", ", tasks[i].Dependencies);
+            detail += $", {dependencyIds}";
+        }
+        details[i] = detail;
+    }
+    return details;
+}
+
+    public bool DoesTaskExist(string taskID)
+    {
+        foreach (var task in tasks)
+        {
+            if (task.TaskID == taskID)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+    // FindEarliestCommencementTimes() and FindTaskSequence() will be left blank 
+    // for now as they require DFS and Topological Search implementations.
+    // Find the earliest possible commencement time for each task in the project
     public string[] FindEarliestCommencementTimes()
     {
-        // Make sure dependencies are reflected in the tasks
-        foreach (ITask task in Tasks)
-        {
-            foreach (ITask dependency in task.Dependencies)
-            {
-                dependency.AddDependency(task);
-            }
-        }
+        int[] commencementTimes = new int[taskCount];
+        bool[] visited = new bool[taskCount];
 
-        // DFS
-        int[] earliestTimes = new int[TaskCount];
-        bool[] visited = new bool[TaskCount];
-
-        for (int i = 0; i < TaskCount; i++)
+        for (int i = 0; i < taskCount; i++)
         {
             if (!visited[i])
-            {
-                DFS(i, earliestTimes, visited);
-            }
+                DFS(i, visited, commencementTimes);
         }
 
-        // Save to file
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < TaskCount; i++)
+        string[] result = new string[taskCount];
+        for (int i = 0; i < taskCount; i++)
         {
-            sb.AppendLine(Tasks[i].TaskID + ", " + earliestTimes[i]);
+            result[i] = $"{tasks[i].TaskID}, {commencementTimes[i]}";
         }
-        File.WriteAllText("EarliestTimes.txt", sb.ToString());
-
-        // Return as string array
-        return sb.ToString().Split('\n');
+        return result;
     }
 
-    private void DFS(int taskIndex, int[] earliestTimes, bool[] visited)
+    private void DFS(int taskIndex, bool[] visited, int[] commencementTimes)
     {
         visited[taskIndex] = true;
-        foreach (ITask dependency in Tasks[taskIndex].Dependencies)
+        ITask task = tasks[taskIndex];
+
+        foreach (string dependencyId in task.Dependencies)
         {
-            int dependencyIndex = GetIndex(dependency.TaskID);
-            if (!visited[dependencyIndex])
+            if (dependencyId != null)
             {
-                DFS(dependencyIndex, earliestTimes, visited);
+                int index = IndexOf(dependencyId);
+                if (!visited[index])
+                    DFS(index, visited, commencementTimes);
+
+                commencementTimes[taskIndex] = Math.Max(commencementTimes[taskIndex], commencementTimes[index] + tasks[index].TimeNeeded);
             }
-            earliestTimes[taskIndex] = Math.Max(earliestTimes[taskIndex], earliestTimes[dependencyIndex] + Tasks[dependencyIndex].TimeNeeded);
         }
     }
+
+    private int IndexOf(string taskID)
+    {
+        for (int i = 0; i < taskCount; i++)
+        {
+            if (tasks[i].TaskID == taskID)
+                return i;
+        }
+        return -1; // not found
+    }
+
+    // Find a sequence of tasks that satisfies all dependencies
+    private int[] TopologicalSort()
+    {
+        int[] stack = new int[taskCount];
+        int top = -1;
+        bool[] visited = new bool[taskCount];
+
+        for (int i = 0; i < taskCount; i++)
+        {
+            if (!visited[i])
+                top = TopologicalSortUtil(i, visited, stack, top);
+        }
+
+        // reverse the array
+        int start = 0, end = top;
+        while (start < end)
+        {
+            int temp = stack[start];
+            stack[start] = stack[end];
+            stack[end] = temp;
+            start++;
+            end--;
+        }
+
+        return stack;
+    }
+
+    private int TopologicalSortUtil(int taskIndex, bool[] visited, int[] stack, int top)
+{
+    visited[taskIndex] = true;
+
+    foreach (string dependencyID in tasks[taskIndex].Dependencies)
+    {
+        if (dependencyID != null)
+        {
+            int index = IndexOf(dependencyID);
+            if (!visited[index])
+                top = TopologicalSortUtil(index, visited, stack, top);
+        }
+    }
+
+    // Shift all elements one position to the right to make room at the beginning
+    for (int i = top; i >= 0; i--)
+    {
+        stack[i + 1] = stack[i];
+    }
+
+    // Insert the task at the beginning of the stack
+    stack[0] = taskIndex;
+    return top + 1;
+}
+
 
     public string[] FindTaskSequence()
+{
+    bool[] visited = new bool[taskCount];
+    int[] stack = new int[taskCount];
+    int top = -1;
+
+    for (int i = 0; i < taskCount; i++)
     {
-        // Topological sort using DFS
-        Stack<int> stack = new Stack<int>();
-        bool[] visited = new bool[TaskCount];
-
-        for (int i = 0; i < TaskCount; i++)
-        {
-            if (!visited[i])
-            {
-                TopologicalSort(i, visited, stack);
-            }
-        }
-
-        // Save to file
-        StringBuilder sb = new StringBuilder();
-        while (!stack.IsEmpty())
-        {
-            sb.AppendLine(Tasks[stack.Pop()].TaskID);
-        }
-        File.WriteAllText("Sequence.txt", sb.ToString());
-
-        // Return as string array
-        return sb.ToString().Split('\n');
+        if (!visited[i])
+            top = TopologicalSortUtil(i, visited, stack, top);
     }
 
-    private void TopologicalSort(int taskIndex, bool[] visited, Stack<int> stack)
+    string[] result = new string[taskCount];
+    for (int i = 0; i <= top; i++)
     {
-        visited[taskIndex] = true;
-        foreach (ITask dependency in Tasks[taskIndex].Dependencies)
-        {
-            int dependencyIndex = GetIndex(dependency.TaskID);
-            if (!visited[dependencyIndex])
-            {
-                TopologicalSort(dependencyIndex, visited, stack);
-            }
-        }
-        stack.Push(taskIndex);
+        // Read the stack in reverse order
+        result[i] = tasks[stack[top - i]].TaskID;
     }
+
+    return result;
+}
+
+
+
+
 }
