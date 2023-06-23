@@ -2,7 +2,7 @@
     "title": "CAB301 ADT Assignment",
     "description": "This project is an assignment for CAB301, focusing on the creation and manipulation of Abstract Data Types (ADTs) in C#. The project implements various ADTs, sorting algorithms, and a task manager using object-oriented programming principles. The sorting algorithms implemented include QuickSort, MergeSort, and BubbleSort. The task manager portion of the project uses priority queues to manage and execute tasks based on priority levels.",
     "type": "Assignment",
-    "photo": "https://cdn-icons-png.flaticon.com/512/3812/3812158.png",
+    "photo": "https://static.vecteezy.com/system/resources/previews/012/619/111/non_2x/blockchain-icon-logo-concept-on-dark-background-cryptocurrency-data-sign-design-illustration-vector.jpg",
     "tags": "C#, ADT, Sorting Algorithms, OOP, Task Manager, CAB301",
     "related_projects": ""
 }
